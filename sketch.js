@@ -116,7 +116,7 @@ function setupUI() {
   });
 
   restartButton = createButton("Play Again");
-  restartButton.position(width / 2 - 50, height / 2 + 20);
+  restartButton.position(width / 2 - 50, height / 2 + 50);
   restartButton.size(100, 40);
   restartButton.mousePressed(() => {
 	gameState = "battle";
@@ -171,26 +171,8 @@ function draw() {
   textAlign(CENTER);
   text(playerTurn ? "Player's Turn" : "Enemy's Turn", width / 2, 40);
 
-  drawHealthBar(
-	50,
-	100,
-	200,
-	playerHealth,
-	"Player",
-	true,
-	playerPoisonTurns,
-	playerSick
-  );
-  drawHealthBar(
-	width - 250,
-	100,
-	200,
-	enemyHealth,
-	selectedEnemy.name,
-	false,
-	enemyPoisonTurns,
-	enemySick
-  );
+  drawHealthBar(50, 100, 200, playerHealth, maxHealth, "Player", true, playerPoisonTurns, playerSick);
+  drawHealthBar(width - 250, 100, 200, enemyHealth, selectedEnemy.health, selectedEnemy.name, false, enemyPoisonTurns, enemySick);
 
   drawConsole();
   drawSparkles();
@@ -270,7 +252,7 @@ function drawEndScreen() {
   textSize(36);
   text(winScreen ? "You Win!" : "You Lose!", width / 2, height / 2 - 50);
   restartButton.show();
-  startButton.hide();
+  startButton.show();
   selectButton.hide();
   logBox.hide();
   attackButtons.forEach((btn) => btn.hide());
@@ -294,6 +276,7 @@ function resetGame() {
   explosions = [];
   floatTexts = [];
   healSparkles = [];
+  startButton.hide();
 
   turnLog = [];
   logBox.html("");
@@ -302,6 +285,34 @@ function resetGame() {
   attackButtons.forEach((btn) => btn.show());
   potionButton.show();
   clearEffectButtons();
+}
+
+function keyPressed() {
+  if (!playerTurn || gameState !== "battle") return;
+
+  switch (key) {
+    case 'w':
+      playerAttack(attacks[0], "Hammer");
+      break;
+    case 'a':
+      playerAttack(attacks[0], "Scalpel");
+      break;
+    case 's':
+      playerAttack(attacks[1], "Burn");
+      break;
+    case 'd':
+      playerAttack(attacks[1], "Poison");
+      break;
+    case 'f':
+      playerAttack(attacks[2], "Infect");
+      break;
+    case 'g':
+      playerAttack(attacks[2], "Malpractice");
+      break;
+    case ' ':
+      playerUsePotion();
+      break;
+  }
 }
 
 function showEffectButtons(attack, button) {
@@ -590,8 +601,8 @@ function applyPoison(target, turns) {
   }
 }
 
-function drawHealthBar(x, y, w, hp, label, isPlayer, poisonTurns, isSick) {
-  let healthRatio = constrain(hp / maxHealth, 0, 1);
+function drawHealthBar(x, y, w, hp, maxHp, label, isPlayer, poisonTurns, isSick) {
+  let healthRatio = constrain(hp / maxHp, 0, 1);
   let healthColor = lerpColor(color(255, 0, 0), color(0, 255, 0), healthRatio);
 
   // Sick enemy tint
