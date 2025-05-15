@@ -21,7 +21,7 @@ let enemySick = false;
 let playerSick = false;
 let playerPoisonDamage = poisonBaseDamage;
 let enemyPoisonDamage = poisonBaseDamage;
-let accuracyModifier = 1;
+let enemyStunned = false;
 let slime = 1;
 
 let playerFlash = 0;
@@ -47,6 +47,19 @@ let logBox;
 let effectButtons = [];
 let currentEffectAttack = null;
 
+let selectedEnemy = null;
+
+let attackState = 0;
+let attackStateEnemy = 0;
+
+let playerIdle;
+let hammerLight;
+let scalpelLight;
+let burnHeavy;
+let poisonHeavy;
+let lightningSpecial;
+let malpracticeSpecial;
+
 let attacks = [
   { name: "Light", damage: [5, 15], hitChance: 1 },
   { name: "Heavy", damage: [10, 20], hitChance: 0.75 },
@@ -58,28 +71,51 @@ let enemyAttacks = [
   { name: "Test2", damage: [5, 15], hitChance: 0.9 },
   { name: "Test3", damage: [5, 15], hitChance: 0.9 },
   { name: "Test4", damage: [5, 15], hitChance: 0.9 },
-  { name: "Heavy", damage: [1,2], hitChance: 1 },
+  { name: "Heavy", damage: [1, 2], hitChance: 1 },
 
- 
- 
-  //slime attacks
-  { name: "Slime", damage: [5, 10], hitChance: 1},
-  { name: "Ooze", damage: [12, 18], hitChance: 0.8},
-  { name: "Crush", damage: [10, 30], hitChance: 0.6},
-  { name: "Devour", damage: [10, 10], hitChance: 1, special: true},
-
- 
-  //
+  //zombie attack
+  { name: "Scratch", damage: [2, 8], hitChance: 0.85 },
+  { name: "Lunge", damage: [8, 24], hitChance: 0.85 },
+  { name: "Bile", damage: [10, 14], hitChance: 0.75 },
+  { name: "Bite", damage: [10, 10], hitChance: 0.7, special: true },
+  //Slime
+  { name: "Slime", damage: [5, 10], hitChance: 1 },
+  { name: "Ooze", damage: [12, 18], hitChance: 0.8 },
+  { name: "Crush", damage: [10, 30], hitChance: 0.6 },
+  { name: "Devour", damage: [10, 10], hitChance: 1, special: true },
 
   { name: "Special", damage: [15, 30], hitChance: 0.5, special: true },
+
+  //
 ];
 
+function preload() {
+  //idle
+  playerIdle = loadImage("idle.gif");
 
+  //attacks
+  hammerLight = loadImage("hammerLight.gif");
+  scalpelLight = loadImage("scalpelLight.gif");
+  burnHeavy = loadImage("burnHeavy.gif");
+  poisonHeavy = loadImage("poisonHeavy.gif");
+  lightningSpecial = loadImage("burnHeavy.gif");
+  malpracticeSpecial = loadImage("malpracticeSpecial.gif");
+}
 
 function setup() {
   createCanvas(600, 600);
   setupUI();
+  
+  playerIdle.resize(200, 150);
+  hammerLight.resize(200, 150);
+  scalpelLight.resize(200, 150);
+  burnHeavy.resize(200, 150);
+  poisonHeavy.resize(200, 150);
+  lightningSpecial.resize(200, 150);
+  malpracticeSpecial.resize(200, 150);
 }
+
+
 
 function setupUI() {
   for (let i = 0; i < attacks.length; i++) {
@@ -136,7 +172,7 @@ function setupUI() {
 }
 
 function draw() {
-  background(220);
+  background(0);
 
   if (gameState === "start") {
 	drawStartScreen();
@@ -166,10 +202,37 @@ function draw() {
   //   enemyPoisonDamagePoisonDamage = poisonBaseDamage;
   // }
 
-  fill(0);
+  fill(220);
   textSize(20);
   textAlign(CENTER);
   text(playerTurn ? "Player's Turn" : "Enemy's Turn", width / 2, 40);
+
+  image(playerIdle, 50, 200);
+
+  if (attackState == 1) {
+    hammerLight.resize(200, 150);
+    image(hammerLight, 50, 200);
+  }
+  if (attackState == 2) {
+    scalpelLight.resize(200, 150);
+    image(scalpelLight, 50, 200);
+  }
+  if (attackState == 3) {
+    poisonHeavy.resize(200, 150);
+    image(poisonHeavy, 50, 200);
+  }
+  if (attackState == 4) {
+    burnHeavy.resize(200, 150);
+    image(burnHeavy, 50, 200);
+  }
+  if (attackState == 5) {
+    lightningHeavy.resize(200, 150);
+    image(lightningHeavy, 50, 200);
+  }
+  if (attackState == 6) {
+    malpracticeHeavy.resize(200, 150);
+    image(malpracticeHeavy, 50, 200);
+  }
 
   drawHealthBar(50, 100, 200, playerHealth, maxHealth, "Player", true, playerPoisonTurns, playerSick);
   drawHealthBar(width - 250, 100, 200, enemyHealth, selectedEnemy.health, selectedEnemy.name, false, enemyPoisonTurns, enemySick);
@@ -189,7 +252,7 @@ function draw() {
   }
 
   if (actionText) {
-	fill(0);
+	fill(255);
 	textSize(18);
 	text(actionText, width / 2, height / 2);
   }
@@ -200,7 +263,7 @@ function drawStartScreen() {
   fill(255);
   textAlign(CENTER, CENTER);
   textSize(36);
-  text("Turn-Based Battle", width / 2, height / 2 - 60);
+  text("Pestilent Tides", width / 2, height / 2 - 60);
   startButton.show();
   restartButton.hide();
   selectButton.hide();
@@ -377,42 +440,78 @@ function playerAttack(attack, effect) {
   let attackText = `You used ${attack.name}`;
 
   if (hit) {
-	dmg = int(random(attack.damage[0], attack.damage[1]));
-	if (effect === "Scalpel") dmg += 5;
-	if (enemySick) dmg += 5;
+    dmg = int(random(attack.damage[0], attack.damage[1]));
+    if (effect === "Hammer") {
+      hammerLight = loadImage("hammerLight.gif");
+      attackState = 1;
+      playerAttackAni();
+      dmg += 5;
+    }
 
-	enemyHealth = max(0, enemyHealth - dmg);
-	addFloatText("-" + dmg, width - 200, 90, [255, 0, 0]);
-	enemyFlash = 5;
-	shakeFrames = 10;
-	if (dmg === attack.damage[1]) criticalFlashFrames = 10;
 
-	if (effect === "Poison") applyPoison("enemy", 3);
-	if (effect === "Burn") applyPoison("enemy", 2);
+    if (effect === "Scalpel") {
+      scalpelLight = loadImage("scalpelLight.gif");
+      attackState = 2;
+      playerAttackAni();
+      if (enemySick) dmg += 10;
+    }
 
-	if (effect === "Infect") {
-  	enemySick = true;
-  	logTurn("Enemy is infected!");
-  	let infectDmg = int(random(20, 31));
-  	enemyHealth = max(0, enemyHealth - infectDmg);
-  	addFloatText("-" + infectDmg + " (Infected!)", width - 200, 70, [
-    	200,
-    	100,
-    	255,
-  	]);
-  	enemyFlash = 5;
-  	shakeFrames = 10;
+    if (effect === "Poison") {
+      poisonHeavy = loadImage("poisonHeavy.gif");
+      attackState = 3;
+      playerAttackAni();
+      applyPoison("enemy", 3);
+    }
+    if (effect === "Burn") {
+      burnHeavy = loadImage("burnHeavy.gif");
+      attackState = 4;
+      playerAttackAni();
+      applyPoison("enemy", 2);
+    }
 
-  	if (enemyHealth <= 0) {
-    	triggerExplosion(width - 200, 100);
-    	logTurn("You Win!");
-    	setTimeout(() => {
-      	winScreen = true;
-      	gameState = "end";
-    	}, 800); // Wait 800ms for effects to play
-    	return;
-  	}
-	}
+    if (effect === "Shock") {
+      lightningHeavy = loadImage("burnHeavy.gif"); //change later, this gif is placeholder
+      attackState = 5;
+      playerAttackAni();
+      enemyStunned = true;
+      logTurn("Enemy is stunned!");
+      let shockDmg = int(random(20, 31));
+      enemyHealth = max(0, enemyHealth - shockDmg);
+      addFloatText("-" + shockDmg + " (Stunned!)", width - 200, 70, [
+        0,
+        0,
+        255,
+      ]);
+      enemyFlash = 5;
+      shakeFrames = 10;
+    }
+    if (effect === "Malpractice") {
+      malpracticeHeavy = loadImage("malpracticeSpecial.gif");
+      attackState = 6;
+      playerAttackAni();
+      dmg = int(random(attack.damage[0], attack.damage[1]));
+      enemyHealth = max(0, enemyHealth - dmg);
+      addFloatText("-" + dmg, width - 200, 70, [0, 0, 255]);
+      enemyFlash = 5;
+      shakeFrames = 10;
+    }
+    
+    
+    enemyHealth = max(0, enemyHealth - dmg);
+    addFloatText("-" + dmg, width - 200, 90, [255, 0, 0]);
+    enemyFlash = 5;
+    //shakeFrames = 10;
+    if (dmg === attack.damage[1]) criticalFlashFrames = 10;
+
+    if (enemyHealth <= 0) {
+      triggerExplosion(width - 200, 100);
+      logTurn("You Win!");
+      setTimeout(() => {
+        winScreen = true;
+        gameState = "end";
+      }, 800); // Wait 800ms for effects to play
+      return;
+    }
   } else {
 	attackText += " (Missed!)";
   }
@@ -622,7 +721,7 @@ function drawHealthBar(x, y, w, hp, maxHp, label, isPlayer, poisonTurns, isSick)
   noFill();
   rect(x, y, w, 20);
 
-  fill(0);
+  fill(255);
   textAlign(isPlayer ? LEFT : RIGHT);
   text(label, isPlayer ? x : x + w, y - 10);
 
@@ -761,3 +860,37 @@ function logTurn(text) {
   logBox.html(turnLog.join("<br>"));
   logBox.elt.scrollTop = logBox.elt.scrollHeight;
 }
+
+function playerAttackAni() {
+  if (attackState == 1)
+    setTimeout(() => {
+      attackState = 0;
+      shakeFrames = 10;
+    }, 900);
+  if (attackState == 2)
+    setTimeout(() => {
+      attackState = 0;
+      shakeFrames = 10;
+    }, 925);
+  if (attackState == 3)
+    setTimeout(() => {
+      attackState = 0;
+      shakeFrames = 10;
+    }, 800);
+  if (attackState == 4)
+    setTimeout(() => {
+      attackState = 0;
+      shakeFrames = 10;
+    }, 1250);
+  if (attackState == 5)
+    setTimeout(() => {
+      attackState = 0;
+      shakeFrames = 10;
+    }, 1250);
+  if (attackState == 6)
+    setTimeout(() => {
+      attackState = 0;
+      shakeFrames = 10;
+    }, 2000);
+}
+
