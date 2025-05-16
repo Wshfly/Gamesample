@@ -1,14 +1,27 @@
+
+
+
 let enemytype = {
-  test: {
-    name: "test",
+
+  Zombie: {
+    name: "Zombie",
     health: 100,
-    moves: ["Test", "Test2"],
-    specialMove: null
+    moves: ["Scratch", "Lunge", "Bile"],
+    specialMove: "Bite"
   },
-  test2: {
-    name: "slime",
+  
+  Slime: {
+    name: "Slime",
     health: 120,
     moves: ["Slime", "Ooze", "Crush"],
     specialMove: "Devour"
   },
+
+  RatKing: {
+    name: "Rat King",
+    health: 250,
+    moves: ["Scratch", "Tail Whip", "Staff Smack", "Crown Toss", "Staff Beam"],
+    specialMove: "Call the Swarm"
+  },
+
 };
