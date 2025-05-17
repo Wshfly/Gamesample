@@ -5,3 +5,60 @@ html, body {
 canvas {
   display: block;
 }
+
+body{
+    font-family:'Courier New', Courier, monospace;
+margin: 0;
+background-color: black;
+color: white;
+}
+
+main {
+  background-color: black;
+}
+
+h1, h2 {
+  color: white;
+}
+
+a, button {
+  color: white ;
+  border-color: white ;
+
+}
+
+a:hover, button:hover {
+  color: white ;
+  border-color: white ;
+}
+
+button {
+  color:black
+}
+
+button:hover {
+    color:black
+}
+
+li a {
+    color: white;
+    text-decoration: none;
+    max-width: fit-content;
+}
+
+p{
+    font-size: large;
+}
+
+#game {
+  position: relative;
+  width: 600px;
+  height: 600px;
+}
+
+.thumbnail{
+  max-width: 100%;
+  height: auto;
+  justify-self: center;
+
+}

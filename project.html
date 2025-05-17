@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.11.5/lib/p5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.3/addons/p5.sound.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <title>Pestilent Tides</title>
+  </head>
+
+  <body>
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+        <div class="container-fluid">
+          <a class="navbar-brand fs-3" href="#">Pestilent Tides - Project</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav ms-auto fs-5">
+              <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+              <li class="nav-item"><a class="nav-link nav-button active" aria-current="page" href="project.html">Project</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="mt-4 text-center">
+
+   <div class="container-lg my-5">
+        <h1 class="my-5">About the project</h1>
+        <div class="row">
+       <div class="col-sm-6 col-md-6 col-lg-6 d-flex justify-content-center align-items-center">
+                <p>Pestilent Tides is an RPG made using p5.js. The project was designed with the Makey Makey in mind. Using conductive materials, physical objects representing the weapons in games can be used to trigger attacks, making the combat more immersive and interactive. The game was originally designed around 3 mini bosses with a final boss; however, currently, two enemies have fully implemented attacks, and one has full animations.</p>
+            </div>
+       <div class="col-sm-6 col-md-6 col-lg-6 d-flex justify-content-center align-items-center">
+                <img src="projectimages/gameplay.png" class="thumbnail" alt="Console For Game">
+            </div>
+        </div>
+    </div>
+    
+
+
+   <div class="container-lg my-5">
+        <h1 class="my-5">Project Development</h1>
+        <h2 class="my-5">Developers</h2>
+    <div class="row">
+        <div class="col-sm-4 col-md-4 col-lg-4 d-flex flex-column align-items-center text-center">
+            <img src="projectimages/kaz.png" class="thumbnail mb-2" alt="Kaz">
+            <p>Kaz (he/him)</p>
+            <p>Programmer</p>
+
+        </div>
+        <div class="col-sm-4 col-md-4 col-lg-4 d-flex flex-column align-items-center text-center">
+            <img src="projectimages/irwin.png" class="thumbnail mb-2" alt="Irwin">
+            <p>Irwin (he/him)</p>
+            <p>Programmer</p>
+        </div>
+        <div class="col-sm-4 col-md-4 col-lg-4 d-flex flex-column align-items-center text-center">
+            <img src="projectimages/asherr.png" class="thumbnail mb-2" alt="Asherr">
+            <p>Asherr (they/them)</p>
+            <p>Artist</p>
+        </div>
+    </div>
+        <h2 class="my-5">Concept Art</h1>
+        <div class="row">
+       <div class="col-sm-6 col-md-6 col-lg-6 d-flex justify-content-center align-items-center">
+                <p>The idea at first was to create a little RPG in a pixelated 8-bit style. This changed as the asset sketches (which where to be traced in the 8-bit style) looked very nice with semi-solid linework. 
+<br><br>The original plan was to reuse old assets Asherr had made for another game, but this quickly changed to a Victorian-styled, bubonic plague take-over. All three of use played with the idea of have PvP but that was soon shot down as we decided we didn't have enough time top dedicate to both PvE and PvP. 
+</p>
+            </div>
+       <div class="col-sm-6 col-md-6 col-lg-6 d-flex justify-content-center align-items-center">
+                <img src="projectimages/concepts.png" class="thumbnail" alt="Concept art for player">
+            </div>
+        </div>
+        <h2 class="my-5">The Console</h2>
+        <div class="row">
+       <div class="col-sm-6 col-md-6 col-lg-6 d-flex justify-content-center align-items-center">
+                <p>The console itself was designed, hand-sculpted by Asherr and then 3D printed by Irwin. Asherr spent 2 days designing and 3 days sculpting the console, officially named the Med Kit, in Nomad sculpt. The original written idea is on the top left and was retconned to what it is now. 
+<br><br>Irwin was then given the files to resize, cut, and 3D print on his Bambu printer. It took around 4 days in total for Irwin to print the pieces. He did a lot of essential editing and resizing.
+<br><br>Asherr and Irwin then came up with the idea to use conductive filament for the tools. To complete the circuit, players must use an item and tap it on the conductive part of the book. This will cause the action in-game to be taken. 
+</p>
+            </div>
+       <div class="col-sm-6 col-md-6 col-lg-6 d-flex justify-content-center align-items-center">
+                <img src="projectimages/console.png" class="thumbnail" alt="Console For Game">
+            </div>
+        </div>
+
+        <h2 class="my-5">Code</h2>
+        <div class="row">
+       <div class="col-sm-6 col-md-6 col-lg-6 d-flex justify-content-center align-items-center">
+                <p>Coding for the game started with the second project, Project 2: Collaborative Game Experience. At the time of that project's competition, the game had 1 enemy with identical attacks to the player, a simple menu, 6 attacks, including 2 light, 2 heavy, and 2 special, along with a potion. 
+                <br><br> Continuing from that, more enemy types have been added, along with a new menu with an enemy select screen, reworked mechanics for player attacks, special enemy afflictions, and compatibility with the Makey Makey controller.
+                <br><br> In the end, animations for players and enemies were implemented. Due to both time constraints and the limits of the engine, only one enemy had full animations.
+                </p>
+            </div>
+       <div class="col-sm-6 col-md-6 col-lg-6 d-flex justify-content-center align-items-center">
+                <img src="projectimages/code.png" class="thumbnail" alt="Example of code">
+            </div>
+        </div>
+            <h2 class="my-5">Assets</h2>
+        <div class="row">
+       <div class="col-sm-6 col-md-6 col-lg-6 d-flex justify-content-center align-items-center">
+                <p>Asherr had drawn over 150 different pieces of the player character’s body part to achieve very basic png animation. For example: Asherr drew 30 different arm movements (without hands) to reuse for separate actions.
+<br><br>It took a full week of animating just for the player character. 
+<br><br>The Enemies were the most fun and simple to design as they were not planned to be as animated as the player character. The Final Boss will remain hidden for fun! 
+</p>
+            </div>
+       <div class="col-sm-6 col-md-6 col-lg-6 d-flex justify-content-center align-items-center">
+                <img src="projectimages/assets.png" class="thumbnail" alt="Assets for players and monsters">
+            </div>
+        </div>
+
+                    <h2 class="my-5">Videos</h2>
+        <div class="row">
+       <div class="col-sm-6 col-md-6 col-lg-6 d-flex justify-content-center align-items-center">
+<iframe width="1200" height="675" src="https://www.youtube.com/embed/_E44-ZekFFU" title="Gameplay 2" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </div>
+       <div class="col-sm-6 col-md-6 col-lg-6 d-flex justify-content-center align-items-center">
+<iframe width="1200" height="675" src="https://www.youtube.com/embed/l8z1gAMCGfY" title="Gameplay 1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+    </div>
+        </div>
+    </div>
+    
+    
+    
+    </div>
+
+
+
+    </main>
+  </body>
+</html>

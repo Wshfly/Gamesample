@@ -1,3 +1,4 @@
+
 let playerHealth = 100;
 let enemyHealth = 100;
 let playerTurn = true;
@@ -106,7 +107,7 @@ function preload() {
   malpracticeSpecial = loadImage("malpracticeSpecial.gif", img => img.resize(200, 150));
   healAni = loadImage("Heal.gif", img => img.resize(200, 150));
 
-  zombieIdle = loadImage("Idle.gif", img => img.resize(320, 240));
+  zombieIdle = loadImage("IdleZombie.gif", img => img.resize(320, 240));
   zombieLight = loadImage("Scrape.gif", img => img.resize(320, 240));
   zombieMedium = loadImage("Lunge.gif", img => img.resize(320, 240));
   zombieHeavy = loadImage("BileShot.gif", img => img.resize(320, 240));
@@ -116,6 +117,9 @@ function preload() {
 
 function setup() {
   createCanvas(600, 600);
+  canvas = createCanvas(600, 600);
+  canvas.parent('game');
+
   setupUI();
   noSmooth();
   pixelDensity(1);
@@ -125,6 +129,7 @@ function setup() {
 function setupUI() {
   for (let i = 0; i < attacks.length; i++) {
     let btn = createButton(attacks[i].name);
+    btn.parent('game');
     btn.position(60, 360 + i * 60);
     btn.size(100, 40);
     btn.mousePressed(() => showEffectButtons(attacks[i], btn));
@@ -132,11 +137,13 @@ function setupUI() {
   }
 
   potionButton = createButton("Potion");
+  potionButton.parent('game');
   potionButton.position(60, 540);
   potionButton.size(100, 40);
   potionButton.mousePressed(playerUsePotion);
 
   startButton = createButton("Play");
+  startButton.parent('game');
   startButton.position(width / 2 - 50, height / 2 + 20);
   startButton.size(100, 40);
   startButton.mousePressed(() => {
@@ -146,6 +153,7 @@ function setupUI() {
   });
 
   selectButton = createButton("Play");
+  selectButton.parent('game');
   selectButton.position(width / 2 - 50, height / 2 + 20);
   selectButton.size(100, 40);
   selectButton.mousePressed(() => {
@@ -157,6 +165,7 @@ function setupUI() {
   });
 
   restartButton = createButton("Play Again");
+  restartButton.parent('game');
   restartButton.position(width / 2 - 50, height / 2 + 20);
   restartButton.size(100, 40);
   restartButton.mousePressed(() => {
@@ -166,6 +175,7 @@ function setupUI() {
   });
 
   logBox = createDiv();
+  logBox.parent('game');
   logBox.position(300, 360);
   logBox.size(280, 180);
   logBox.style("background", "#bbbbbb");
@@ -334,6 +344,7 @@ function drawSelectScreen() {
     for (let key in enemytype) {
       let enemy = enemytype[key];
       let btn = createButton(enemy.name);
+      btn.parent('game');
       btn.position(width / 2 - 50, height / 2 - 40 + i * 50);
       btn.size(120, 40);
       btn.mousePressed(() => {
@@ -430,7 +441,6 @@ function showEffectButtons(attack, button) {
 
   currentEffectAttack = attack;
   clearEffectButtons();
-
   button.hide(); // hide the current button
   lastHiddenButton = button; // track it
 
@@ -441,6 +451,7 @@ function showEffectButtons(attack, button) {
 
   for (let i = 0; i < choices.length; i++) {
     let effBtn = createButton(choices[i]);
+    effBtn.parent('game');
     effBtn.position(button.x + i * 110, button.y);
     effBtn.size(100, 40);
     effBtn.mousePressed(() => {
@@ -979,7 +990,7 @@ function playerAttackAni() {
   if (attackState == 7)
     setTimeout(() => {
       attackState = 0;
-    }, 2000);
+    }, 1800);
 }
 
 function enemyAttackAni (){
